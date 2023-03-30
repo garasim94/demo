@@ -24,10 +24,8 @@
     </div>
     <div>List of the message</div>
     <form method="post" action="filter">
-        <label>
             <input type="text" name="filter">
             <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-        </label>
         <button type="submit">Find</button>
     </form>
         {{#messages}}
