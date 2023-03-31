@@ -12,13 +12,9 @@
 </div>
     <div>
         <form method="post">
-            <label>
-                <input type="text" name="text" placeholder="Enter message">
-            </label>
-            <label>
+                <input type="text" name="text" placeholder="Enter message"/>
                 <input type="text" name="tag" placeholder="Tag">
                 <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-            </label>
             <button type="submit">Add</button>
         </form>
     </div>
