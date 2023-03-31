@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Map;
 
@@ -40,7 +41,8 @@ public class MainController {
             @AuthenticationPrincipal User user,
             @RequestParam String text,
             @RequestParam String tag,
-            Map<String, Object> model) {
+            Map<String, Object> model,
+            @RequestParam("file") MultipartFile file) {
         Message message= new Message(text,tag,user);
         messageRepo.save(message);
         Iterable<Message> messages = messageRepo.findAll();
