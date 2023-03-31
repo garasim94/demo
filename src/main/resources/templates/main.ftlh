@@ -29,7 +29,7 @@
             <strong>${message.authorName}</strong>
             <div>
                 <#if message.filename??>
-                    <img src="/img/${massage.filename}">
+                    <img src="/img/${message.filename}">
                 </#if>
             </div>
         </div>
