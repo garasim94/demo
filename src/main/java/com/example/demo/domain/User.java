@@ -26,6 +26,14 @@ public class User implements UserDetails {
         return roles.contains(Role.ADMIN);
     }
 
+    public boolean isUser() {
+        return roles.contains(Role.USER);
+    }
+
+    public boolean hasRole(){
+        return roles.isEmpty();
+    }
+
     public Long getId() {
         return id;
     }

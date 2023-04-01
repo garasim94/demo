@@ -1,9 +1,11 @@
 package com.example.demo.controller;
 
+import com.example.demo.domain.Role;
 import com.example.demo.domain.Trip;
 import com.example.demo.domain.Trip;
 import com.example.demo.domain.User;
 import com.example.demo.repos.TripRepo;
+import com.example.demo.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -16,6 +18,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -23,7 +26,8 @@ import java.util.UUID;
 public class MainController {
     @Autowired
     private TripRepo tripRepo;
-
+    @Autowired
+    private UserService userService;
     @Value("${upload.path}")
     private String uploadPath;
 
@@ -35,7 +39,7 @@ public class MainController {
     @GetMapping("/main")
     public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
         Iterable<Trip> trips = tripRepo.findAll();
-
+        List<User> drivers= userService.getUsersByRole(Role.DRIVER);
         if (filter != null && !filter.isEmpty()) {
             trips = tripRepo.findByTag(filter);
         } else {
@@ -44,7 +48,7 @@ public class MainController {
 
         model.addAttribute("trips", trips);
         model.addAttribute("filter", filter);
-
+        model.addAttribute("drivers", drivers);
         return "main";
     }
 
