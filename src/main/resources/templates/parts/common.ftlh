@@ -3,7 +3,7 @@
     <html lang="en">
     <head>
         <meta charset="UTF-8">
-        <title>Course project</title>
+        <title>Sweater</title>
         <link rel="stylesheet" href="/static/style.css">
 
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -14,7 +14,7 @@
     <body>
     <#include "navbar.ftlh">
     <div class="container mt-5">
-    <#nested>
+        <#nested>
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

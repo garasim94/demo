@@ -1,8 +1,9 @@
 package com.example.demo.controller;
 
-import com.example.demo.domain.Message;
+import com.example.demo.domain.Trip;
+import com.example.demo.domain.Trip;
 import com.example.demo.domain.User;
-import com.example.demo.repos.MessageRepo;
+import com.example.demo.repos.TripRepo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -21,25 +22,29 @@ import java.util.UUID;
 @Controller
 public class MainController {
     @Autowired
-    private MessageRepo messageRepo;
+    private TripRepo tripRepo;
 
     @Value("${upload.path}")
     private String uploadPath;
 
     @GetMapping("/")
-    public String greeting(Map<String,Object> model){
+    public String greeting(Map<String, Object> model) {
         return "greeting";
     }
+
     @GetMapping("/main")
-    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model){
-        Iterable<Message> messages = messageRepo.findAll();
+    public String main(@RequestParam(required = false, defaultValue = "") String filter, Model model) {
+        Iterable<Trip> trips = tripRepo.findAll();
+
         if (filter != null && !filter.isEmpty()) {
-            messages = messageRepo.findByTag(filter);
+            trips = tripRepo.findByTag(filter);
         } else {
-            messages = messageRepo.findAll();
+            trips = tripRepo.findAll();
         }
-        model.addAttribute("messages",messages);
-        model.addAttribute("filter",filter);
+
+        model.addAttribute("trips", trips);
+        model.addAttribute("filter", filter);
+
         return "main";
     }
 
@@ -47,25 +52,32 @@ public class MainController {
     public String add(
             @AuthenticationPrincipal User user,
             @RequestParam String text,
-            @RequestParam String tag,
-            Map<String, Object> model,
-            @RequestParam("file") MultipartFile file) throws IOException {
-        Message message= new Message(text,tag,user);
-        if(!file.isEmpty()){
-            File uploadDir=new File(uploadPath);
-            if(!uploadDir.exists()){
+            @RequestParam String tag, Map<String, Object> model,
+            @RequestParam("file") MultipartFile file
+    ) throws IOException {
+        Trip trip = new Trip(text, tag, user);
+
+        if (file != null && !file.getOriginalFilename().isEmpty()) {
+            File uploadDir = new File(uploadPath);
+
+            if (!uploadDir.exists()) {
                 uploadDir.mkdir();
             }
-            //избежать колизий
-            String uuidFile=UUID.randomUUID().toString();
-            String resultFilename = uuidFile +"."+file.getOriginalFilename();
-            file.transferTo(new File(uploadPath+"/"+resultFilename));
-            message.setFilename(resultFilename);
+
+            String uuidFile = UUID.randomUUID().toString();
+            String resultFilename = uuidFile + "." + file.getOriginalFilename();
+
+            file.transferTo(new File(uploadPath + "/" + resultFilename));
+
+            trip.setFilename(resultFilename);
         }
-        messageRepo.save(message);
-        Iterable<Message> messages = messageRepo.findAll();
-        model.put("messages", messages);
+
+        tripRepo.save(trip);
+
+        Iterable<Trip> trips = tripRepo.findAll();
+
+        model.put("trips", trips);
+
         return "main";
     }
-
 }
