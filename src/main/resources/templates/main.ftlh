@@ -15,7 +15,7 @@
     </a>
     <div class="collapse" id="collapseExample">
         <div class="form-group mt-3">
-            <form method="post" enctype="multipart/form-data">
+            <form method="post" enctype="multipart/form-data" action="/main/save">
                 <div class="form-group">
                     <input type="text" class="form-control" name="text" placeholder="Enter message" />
                 </div>
@@ -23,17 +23,12 @@
                     <input type="text" class="form-control" name="tag" placeholder="Tag">
                 </div>
 
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="userDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Users
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="userDropdown">
-                        <!-- Generate dropdown items from user list -->
-                        <#list drivers as user>
-                            <a class="dropdown-item" href="#">${user.username}</a>
-                        </#list>
-                    </div>
-                </div>
+                <select class="form-control" id="userSelect" name="id">
+                    <option selected disabled>-- Select a driver --</option>
+                    <#list drivers as user>
+                        <option value="${user.id}">${user.username}</option>
+                    </#list>
+                </select>
 
 <#--                <div class="form-group">-->
 <#--                    <div class="custom-file">-->

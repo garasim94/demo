@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -52,29 +53,30 @@ public class MainController {
         return "main";
     }
 
-    @PostMapping("/main")
+    @PostMapping("/main/save")
     public String add(
-            @AuthenticationPrincipal User user,
+//            @AuthenticationPrincipal User user,
+            //            @RequestParam("file") MultipartFile file
+            @RequestParam("id") Long userId,
             @RequestParam String text,
-            @RequestParam String tag, Map<String, Object> model,
-            @RequestParam("file") MultipartFile file
-    ) throws IOException {
+            @RequestParam String tag, Map<String, Object> model) throws IOException {
+        User user=userService.getUserById(userId);
         Trip trip = new Trip(text, tag, user);
 
-        if (file != null && !file.getOriginalFilename().isEmpty()) {
-            File uploadDir = new File(uploadPath);
-
-            if (!uploadDir.exists()) {
-                uploadDir.mkdir();
-            }
-
-            String uuidFile = UUID.randomUUID().toString();
-            String resultFilename = uuidFile + "." + file.getOriginalFilename();
-
-            file.transferTo(new File(uploadPath + "/" + resultFilename));
-
-            trip.setFilename(resultFilename);
-        }
+//        if (file != null && !file.getOriginalFilename().isEmpty()) {
+//            File uploadDir = new File(uploadPath);
+//
+//            if (!uploadDir.exists()) {
+//                uploadDir.mkdir();
+//            }
+//
+//            String uuidFile = UUID.randomUUID().toString();
+//            String resultFilename = uuidFile + "." + file.getOriginalFilename();
+//
+//            file.transferTo(new File(uploadPath + "/" + resultFilename));
+//
+//            trip.setFilename(resultFilename);
+//        }
 
         tripRepo.save(trip);
 
@@ -82,6 +84,6 @@ public class MainController {
 
         model.put("trips", trips);
 
-        return "main";
+        return "redirect:/main";
     }
 }
